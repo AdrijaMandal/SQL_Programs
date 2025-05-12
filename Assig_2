@@ -1,0 +1,260 @@
+CREATE TABLE CLIENT_MASTER_42
+(
+CLIENT_NUMBER VARCHAR2(6) PRIMARY KEY,
+NAME VARCHAR2(20) NOT NULL,
+CITY VARCHAR(15),
+PINCODE NUMBER(8),
+STATE VARCHAR2(15),
+BAL_DUE NUMBER(10,2),
+CONSTRAINT CHK_CLIENT_NUMBER CHECK (CLIENT_NUMBER LIKE 'C%')
+);
+
+INSERT INTO CLIENT_MASTER_42 VALUES('C00001','Ivan Bayross','Mumbai',400054,'Maharashtra',15000);
+INSERT INTO CLIENT_MASTER_42 VALUES('C00002','Mamta Majumdar','Madras',780001,'Tamil Nadu',0);
+INSERT INTO CLIENT_MASTER_42 VALUES('C00003','Chhaya Bankar','Mumbai',400057,'Maharashtra',5000);
+INSERT INTO CLIENT_MASTER_42 VALUES('C00004','Ashwini Joshi','Bangalore',560001,'Karnataka',0);
+INSERT INTO CLIENT_MASTER_42 VALUES('C00005','Hansel Colaco','Mumbai',400060,'Maharashtra',2000);
+INSERT INTO CLIENT_MASTER_42 VALUES('C00006','Deepak sharma','Mangalore',560050,'Karnataka',0);
+
+
+SQL> SELECT * FROM CLIENT_MASTER_42;
+
+CLIENT NAME                 CITY               PINCODE   STATE			   BAL_DUE
+------ -------------------- ---------------   ---------- ---------------   ----------
+
+C00001 Ivan Bayross         Mumbai              400054   Maharashtra		15000
+     
+C00002 Mamta Majumdar       Madras              780001   Tamil Nadu				0
+
+C00003 Chhaya Bankar        Mumbai              400057   Maharashtra		 5000
+    
+C00004 Ashwini Joshi        Bangalore           560001   Karnataka				0
+
+C00005 Hansel Colaco        Mumbai              400060   Maharashtra		 2000
+
+C00006 Deepak sharma        Mangalore           560050   Karnataka				0
+
+6 rows selected.
+
+
+
+CREATE TABLE PRODUCT_MASTER_42
+(
+PRODUCT_NO VARCHAR2(6) PRIMARY KEY,
+DESCRIPTION VARCHAR2(15) NOT NULL,
+PROFIT_PERCENT NUMBER(4,2) NOT NULL,
+UNIT_MEASURE VARCHAR2(10) NOT NULL,
+QTY_ON_HAND NUMBER(8) NOT NULL,
+REORDER_LVL NUMBER(8) NOT NULL,
+SELL_PRICE NUMBER(8,2) NOT NULL,
+COST_PRICE NUMBER(8,2) NOT NULL,
+CONSTRAINT PRODUCT_NO CHECK (PRODUCT_NO LIKE 'P%')
+);
+
+
+INSERT INTO PRODUCT_MASTER_42 VALUES('P00001','T-Shirts',5,'piece',200,50,350,250);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P0345','Shirts',6,'piece',150,50,500,350);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P06734','Cotton Jeans',5,'piece',100,20,600,450);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P07865','Jeans',5,'piece',100,20,750,500);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P07868','Trousers',2,'piece',150,50,850,550);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P07885','PuM-Overs',2.5,'piece',80,30,700,450);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P07965','Denim-Shirts',4,'piece',100,40,350,250);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P07975','Lyers Tops',5,'piece',70,30,300,175);
+INSERT INTO PRODUCT_MASTER_42 VALUES('P08865','Skirts',5,'piece',75,30,450,300);
+
+
+SQL> SELECT * FROM PRODUCT_MASTER_42;
+
+PRODUCT DESCRIPTION     PROFIT_PERCENT UNIT_MEASU QTY_ON_HAND REORDER_LVL	SELL_PRICE COST_PRICE
+------ --------------- -------------- ---------- ----------- -----------	---------- ----------
+
+P00001 T-Shirts                     5 piece              200          50		350        250
+
+P0345  Shirts                       6 piece              150          50		500        350       
+
+P06734 Cotton Jeans                 5 piece              100          20		600        450       
+	   
+P07865 Jeans                        5 piece              100          20		750        500       
+
+P07868 Trousers                     2 piece              150          50		850        550       
+
+P07885 PuM-Overs                  2.5 piece               80          30		700        450       
+	   
+P07965 Denim-Shirts                 4 piece              100          40		350        250
+       
+P07975 Lyers Tops                   5 piece               70          30		300        175       
+
+P08865 Skirts                       5 piece               75          30		450        300
+       
+	   
+	   
+CREATE TABLE SALESMAN_MASTER_42
+(
+SALESMAN_NO VARCHAR2(6) PRIMARY KEY,
+SALESMAN_NAME VARCHAR2(20) NOT NULL,
+ADDRESS1 VARCHAR2(10) NOT NULL,
+ADDRESS2 VARCHAR(10),
+CITY VARCHAR2(20),
+PINCODE NUMBER(7),
+STATE VARCHAR2(20),
+SAL_AMT NUMBER(8,2) NOT NULL,
+TGT_TO_GET NUMBER(6,2) NOT NULL,
+YTD_SALES NUMBER(6,2) NOT NULL,
+REMARKS VARCHAR2(20),
+CONSTRAINT S_SALESMAN_NO CHECK (SALESMAN_NO LIKE 'S%')
+);
+
+
+INSERT INTO SALESMAN_MASTER_42 VALUES('S00001','Aman','A/14','Worli','Mumbai','400002','Maharashtra',3000,100,50,'Good');
+INSERT INTO SALESMAN_MASTER_42  VALUES('S00002','Omkar',65,'Nariman','Mumbai','400001','Maharashtra',3000,200,100,'Good');
+INSERT INTO SALESMAN_MASTER_42 VALUES('S00003','Raj','P-7','Bandra','Mumbai','400032','Maharashtra',3000,200,100,'Good');
+INSERT INTO SALESMAN_MASTER_42 VALUES('S00004','Ashish','A/5','Juhu','Mumbai','400044','Maharashtra',3500,200,150,'Good');
+
+
+SQL> SELECT * FROM SALESMAN_MASTER_42;
+
+SALESM SALESMAN_NAME    ADDRESS1   ADDRESS2   CITY		PINCODE    STATE      SAL_AMT    TGT_TO_GET  YTD_SALES  REMARKS
+------ --------------- ---------- ---------- ---------	------- ------------ ----------  ----------  ---------- --------
+   
+S00001   Aman            A/14       Worli     Mumbai     400002  Maharashtra     3000        100         50		 Good
+    
+S00002   Omkar             65      Nariman    Mumbai	 400001  Maharashtra     3000        200        100		 Good
+
+S00003   Raj              P-7      Bandra     Mumbai     400032  Maharashtra     3000        200        100		 Good
+    
+S00004   Ashish           A/5        Juhu     Mumbai	 400044  Maharashtra     3500        200        150		 Good
+    
+
+CREATE TABLE SALES_ORDER_42_A
+(
+ORDER_NO VARCHAR2(6) PRIMARY KEY,
+CLIENT_NUMBER VARCHAR2(6),
+DELY_DATE DATE,
+SALESMAN_NO VARCHAR2(6),
+DELY_TYPE CHAR(1) DEFAULT 'F',
+BILLED_YN CHAR(1),
+ORDER_DATE DATE,
+ORDER_STATUS VARCHAR2(10),
+CONSTRAINT SALES_ORDER_CLIENT_NO FOREIGN KEY (CLIENT_NUMBER) REFERENCES CLIENT_MASTER_42 (CLIENT_NUMBER),
+CONSTRAINT SALES_ORDER_SALESMAN_NO FOREIGN KEY (SALESMAN_NO) REFERENCES SALESMAN_MASTER_42 (SALESMAN_NO),
+CHECK (ORDER_NO LIKE 'O%' AND DELY_TYPE IN ('P','F') AND DELY_DATE>=ORDER_DATE AND ORDER_STATUS IN ('IN PROCESS','FULFILLED','BACKORDER','CANCELLED'))
+);
+
+
+INSERT INTO SALES_ORDER_42_A VALUES('O19001','C00001','12-Jun-04','S00001','F','N','20-Jul-02','IN PROCESS');
+INSERT INTO SALES_ORDER_42_A VALUES('O19002','C00002','25-Jun-04','S00002','P','N','27-Jun-02','CANCELLED');
+INSERT INTO SALES_ORDER_42_A VALUES('O46865','C00003','18-Feb-04','S00003','F','Y','20-Feb-02','FULFILLED');
+INSERT INTO SALES_ORDER_42_A VALUES('O19003','C00001','03-Apr-04','S00001','F','Y','07-Apr-02','FULFILLED');
+INSERT INTO SALES_ORDER_42_A VALUES('O46866','C00004','20-May-04','S00002','P','N','22-May-02','CANCELLED');
+INSERT INTO SALES_ORDER_42_A VALUES('O19008','C00005','24-May-04','S00004','F','N','26-Jul-02','IN PROCESS');
+
+
+ORDER_ CLIENT DELY_DATE SALESM D B ORDER_DAT ORDER_STAT
+------ ------ --------- ------ - - --------- ----------
+O19001 C00001 12-JUN-04 S00001 F N 20-JUL-02 IN PROCESS
+O19002 C00002 25-JUN-04 S00002 P N 27-JUN-02 CANCELLED
+O46865 C00003 18-FEB-04 S00003 F Y 20-FEB-02 FULFILLED
+O19003 C00001 03-APR-04 S00001 F Y 07-APR-02 FULFILLED
+O46866 C00004 20-MAY-04 S00002 P N 22-MAY-02 CANCELLED
+O19008 C00005 24-MAY-04 S00004 F N 26-JUL-02 IN PROCESS
+
+6 rows selected.
+
+
+
+CREATE TABLE SALES_ORDER_DETAILS_42
+(
+ORDER_NO VARCHAR2(6),
+PRODUCT_NO VARCHAR2(6),
+QTY_ORDERED NUMBER(8),
+QTY_DISP NUMBER(8),
+PRODUCT_RATE NUMBER(10,2),
+FOREIGN KEY (ORDER_NO) REFERENCES SALES_ORDER_42_A(ORDER_NO),
+FOREIGN KEY (PRODUCT_NO) REFERENCES PRODUCT_MASTER_42(PRODUCT_NO)
+);
+
+
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19001','P00001',4,4,525);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19001','P07965',2,1,8400);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19001','P07885',2,1,5250);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19002','P00001',10,0,525);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O46865','P07868',3,3,3150);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O46865','P07885',3,1,5250);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O46865','P00001',10,10,525);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O46865','P0345',4,4,1050);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19003','P03453',2,2,1050);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19003','P06734',1,1,12000);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O46866','P07965',1,0,8400);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O46866','P07975',1,0,1050);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19008','P00001',10,5,525);
+INSERT INTO SALES_ORDER_DETAILS_42 VALUES('O19008','P07975',5,3,1050);
+
+
+SQL> SELECT * FROM SALES_ORDER_DETAILS_42;
+
+ORDER_ PRODUC QTY_ORDERED   QTY_DISP PRODUCT_RATE
+------ ------ ----------- ---------- ------------
+O19001 P00001           4          4          525
+O19001 P07965           2          1         8400
+O19001 P07885           2          1         5250
+O19002 P00001          10          0          525
+O46865 P07868           3          3         3150
+O46865 P07885           3          1         5250
+O46865 P00001          10         10          525
+O46865 P0345            4          4         1050
+O19003 P06734           1          1        12000
+O46866 P07965           1          0         8400
+O46866 P07975           1          0         1050
+O19008 P00001          10          5          525
+O19008 P07975           5          3         1050
+
+13 rows selected.
+
+
+
+3.
+a)SQL> SELECT * FROM  CLIENT_MASTER_42 WHERE NAME LIKE '_a%';
+
+CLIENT NAME                 CITY               PINCODE STATE
+------ -------------------- --------------- ---------- ---------------
+   BAL_DUE
+----------
+C00002 Mamta Majumdar       Madras              780001 Tamil Nadu
+         0
+
+C00005 Hansel Colaco        Mumbai              400060 Maharashtra
+      2000
+
+
+b) SQL> SELECT * FROM  CLIENT_MASTER_42 WHERE CITY LIKE '_a%';
+
+CLIENT NAME                 CITY               PINCODE STATE
+------ -------------------- --------------- ---------- ---------------
+   BAL_DUE
+----------
+C00002 Mamta Majumdar       Madras              780001 Tamil Nadu
+         0
+
+C00004 Ashwini Joshi        Bangalore           560001 Karnataka
+         0
+
+C00006 Deepak sharma        Mangalore           560050 Karnataka
+         0
+
+
+
+c) SQL> SELECT * FROM CLIENT_MASTER_42 WHERE CITY IN ('Mumbai', 'Delhi');
+
+CLIENT NAME                 CITY               PINCODE STATE
+------ -------------------- --------------- ---------- ---------------
+   BAL_DUE
+----------
+C00001 Ivan Bayross         Mumbai              400054 Maharashtra
+     15000
+
+C00003 Chhaya Bankar        Mumbai              400057 Maharashtra
+      5000
+
+C00005 Hansel Colaco        Mumbai              400060 Maharashtra
+      2000
+
