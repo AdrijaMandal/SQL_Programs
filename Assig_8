@@ -1,0 +1,201 @@
+CREATE TABLE SALESPEOPLE_42
+(
+SNUM VARCHAR(10) PRIMARY KEY,
+SNAME CHAR(20),
+CITY CHAR(10),
+COMM NUMBER(5)
+);
+CREATE TABLE CUSTOMER_42
+(
+CNUM VARCHAR(10) PRIMARY KEY,
+CNAME CHAR(20),
+CITY CHAR(10),
+RATING NUMBER(5),
+SNUM VARCHAR(10) REFERENCES SALESPEOPLE_42(SNUM)
+);
+CREATE TABLE ORDERS_I_42
+(
+ONUM VARCHAR(10) PRIMARY KEY,
+AMT NUMBER(5),
+ODATE DATE,
+CNUM VARCHAR(10) REFERENCES CUSTOMER_42(CNUM),
+SNUM VARCHAR(10) REFERENCES SALESPEOPLE_42(SNUM)
+);
+
+INSERT INTO SALESPEOPLE_42 VALUES('S0001','ADRIJA','ARAMBAGH',700);
+INSERT INTO SALESPEOPLE_42 VALUES('S0002','MADHU','HOWRAH',700);
+INSERT INTO SALESPEOPLE_42 VALUES('S0003','GITA','KOLKATA',700);
+INSERT INTO SALESPEOPLE_42 VALUES('S0004','MITA','MUMBAI',700);
+INSERT INTO SALESPEOPLE_42 VALUES('S0005','RITA','CHENNAI',700);
+
+INSERT INTO CUSTOMER_42 VALUES('C0001','RAM','DELHI',5,'S0001');
+INSERT INTO CUSTOMER_42 VALUES('C0002','SHYAM','KERALA',5,'S0002');
+INSERT INTO CUSTOMER_42 VALUES('C0003','RAM','ARAMBAGH',4,'S0003');
+INSERT INTO CUSTOMER_42 VALUES('C0004','RAM','TAMIL NADU',3,'S0004');
+INSERT INTO CUSTOMER_42 VALUES('C0005','RAM','PUNJAB',4,'S0005');
+
+INSERT INTO ORDERS_I_42 VALUES('O0001',500,'02-APR-04','C0001','S0001');
+INSERT INTO ORDERS_I_42 VALUES('O0002',600,'02-SEP-05','C0002','S0002');
+INSERT INTO ORDERS_I_42 VALUES('O0003',200,'16-OCT-07','C0003','S0003');
+INSERT INTO ORDERS_I_42 VALUES('O0004',400,'22-JAN-04','C0004','S0004');
+INSERT INTO ORDERS_I_42 VALUES('O0005',700,'12-MAY-06','C0005','S0005');
+
+
+SQL> SELECT * FROM SALESPEOPLE_42;
+
+SNUM       SNAME                CITY             COMM
+---------- -------------------- ---------- ----------
+S0001      ADRIJA               ARAMBAGH          700
+S0002      MADHU                HOWRAH            700
+S0003      GITA                 KOLKATA           700
+S0004      MITA                 MUMBAI            700
+S0005      RITA                 CHENNAI           700
+
+SQL> SELECT * FROM CUSTOMER_42;
+
+CNUM       CNAME                CITY           RATING SNUM
+---------- -------------------- ---------- ---------- ----------
+C0001      RAM                  DELHI               5 S0001
+C0002      SHYAM                KERALA              5 S0002
+C0003      RAM                  ARAMBAGH            4 S0003
+C0004      RAM                  TAMIL NADU          3 S0004
+C0005      RAM                  PUNJAB              4 S0005
+
+
+SQL> SELECT * FROM ORDERS_I_42;
+
+ONUM              AMT ODATE     CNUM       SNUM
+---------- ---------- --------- ---------- ----------
+O0001             500 02-APR-04 C0001      S0001
+O0002             600 02-SEP-05 C0002      S0002
+O0003             200 16-OCT-07 C0003      S0003
+O0004             400 22-JAN-04 C0004      S0004
+O0005             700 12-MAY-06 C0005      S0005
+
+
+2)a) SQL> CREATE VIEW CUSTOMER_RATING AS (SELECT * FROM CUSTOMER_42 WHERE RATING=(SELECT MAX(RATING) FROM CUSTOMER_42));
+
+View created.
+
+SQL> SELECT * FROM CUSTOMER_RATING;
+
+CNUM       CNAME                CITY           RATING SNUM
+---------- -------------------- ---------- ---------- ----------
+C0001      RAM                  DELHI               5 S0001
+C0002      SHYAM                KERALA              5 S0002
+
+
+b) SQL> CREATE VIEW SALESPERSON_CITY AS (SELECT CITY, COUNT(SNUM) AS NUM_SALESPEOPLE FROM SALESPEOPLE_42 GROUP BY CITY);
+
+View created.
+
+SQL> SELECT * FROM SALESPERSON_CITY;
+
+CITY       NUM_SALESPEOPLE
+---------- ---------------
+HOWRAH                   1
+MUMBAI                   1
+ARAMBAGH                 1
+CHENNAI                  1
+KOLKATA                  1
+
+c) SQL> CREATE VIEW SALESPERSON_O_S AS (SELECT SNUM, COUNT(ONUM) AS TOTAL_OREDRS, AVG(AMT) AS AVERAGE_ORDER_AMOUNT
+  2  FROM ORDERS_I_42 GROUP BY SNUM);
+
+View created.
+
+SQL> SELECT * FROM SALESPERSON_O_S;
+
+SNUM       TOTAL_OREDRS AVERAGE_ORDER_AMOUNT
+---------- ------------ --------------------
+S0001                 1                  500
+S0005                 1                  700
+S0004                 1                  400
+S0002                 1                  600
+S0003                 1                  200
+
+d)
+CREATE VIEW VIEW_42 AS
+(
+	SELECT SNUM, COUNT(CNUM) "NO. OF CUSTOMERS"
+	FROM CUSTOMER_42
+	GROUP BY SNUM
+	HAVING COUNT(CNUM) > 1
+);
+
+SQL> SELECT * FROM VIEW_42;
+
+SNUM  NO. OF CUSTOMERS
+----- ----------------
+S002                 2
+
+3)
+CREATE VIEW SALESPEOPLE_CUSTOMER_ORDERS_TS AS
+(
+	SELECT S.SNAME SALESPEOPLE_NAME, C.CNAME CUSTOMER_NAME, O.ONUM ORDER_NUMBER
+	FROM SALESPEOPLE_42 S, CUSTOMER_42 C, ORDER_42 O
+	WHERE O.CNUM = C.CNUM
+	AND O.SNUM = S.SNUM
+);
+
+SQL> SELECT * FROM SALESPEOPLE_CUSTOMER_ORDERS_42;
+
+SALESPEOPLE_NAME     CUSTOMER_NAME        ORDER
+-------------------- -------------------- -----
+Ravi                 Amit                 O001
+Anita                Neha                 O004
+Anita                Neha                 O002
+John                 Sameer               O003
+Leena                Priya                O006
+Anita                Aditya               O005
+
+6 rows selected.
+
+4)
+CREATE VIEW VIEW_42 AS
+SELECT SNUM, COMM
+FROM SALESPEOPLE_42
+WHERE COMM BETWEEN 1000 AND 2000
+WITH CHECK OPTION;
+
+SQL> SELECT * FROM VIEW_42;
+
+SNUM        COMM
+----- ----------
+S001        1200
+S002        1800
+S003        1500
+S005        1100
+
+SQL> INSERT INTO VIEW_42 VALUES ('S006',2500);
+INSERT INTO VIEW_42 VALUES ('S006',2500)
+            *
+ERROR at line 1:
+ORA-01402: view WITH CHECK OPTION where-clause violation
+
+SQL> INSERT INTO VIEW_42 VALUES ('S006',2000);
+
+1 row created.
+
+SQL> SELECT * FROM VIEW_42;
+
+SNUM        COMM
+----- ----------
+S001        1200
+S002        1800
+S003        1500
+S005        1100
+S006        2000
+
+SQL> SELECT * FROM SALESPEOPLE_42;
+
+SNUM  SNAME                CITY             COMM
+----- -------------------- ---------- ----------
+S001  Ravi                 Mumbai           1200
+S002  Anita                Delhi            1800
+S003  John                 Mumbai           1500
+S004  Leena                Kolkata          2100
+S005  Raj                  Delhi            1100
+S006                                        2000
+
+6 rows selected.
