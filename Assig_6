@@ -1,0 +1,96 @@
+1)
+
+CREATE TABLE CUSTOMERS_
+(
+	CUSTOMERID NUMBER(2) PRIMARY KEY,
+	CUSTOMERNAME VARCHAR2(20),
+	CONTACTNAME VARCHAR2(20),
+	ADDRESS VARCHAR2(30),
+	CITY VARCHAR2(20),
+	POSTALCODE NUMBER(6),
+	COUNTRY VARCHAR2(20)
+);
+
+INSERT INTO CUSTOMERS VALUES(1,'Alfreds Futter','Maria Andres','Obere Str.57','Berlin',12209,'Germany');
+INSERT INTO CUSTOMERS VALUES(2,'Ana helados','Ana Trujillo','Avda. Construction 2222','Mexico D.F',05021,'Mexico');
+INSERT INTO CUSTOMERS VALUES(3,'Antonio Moreno','Antonio Moreno','Mataderos 2312','Mexico D.F',05023,'Mexico');
+
+SQL> SELECT * FROM CUSTOMERS;
+
+CUSTOMERID CUSTOMERNAME         CONTACTNAME          ADDRESS                        CITY                 POSTALCODE COUNTRY
+---------- -------------------- -------------------- ------------------------------ -------------------- ---------- --------------------
+         1 Alfreds Futter       Maria Andres         Obere Str.57                   Berlin                    12209 Germany
+         2 Ana helados          Ana Trujillo         Avda. Construction 2222        Mexico D.F                 5021 Mexico
+         3 Antonio Moreno       Antonio Moreno       Mataderos 2312                 Mexico D.F                 5023 Mexico
+
+
+CREATE TABLE SUPPLIERS
+(
+	SUPPLIERID NUMBER(2) PRIMARY KEY,
+	SUPPLIERNAME VARCHAR2(20),
+	CONTACTNAME VARCHAR2(20),
+	ADDRESS VARCHAR2(30),
+	CITY VARCHAR2(20),
+	POSTALCODE NUMBER(6),
+	COUNTRY VARCHAR2(20)
+);
+
+INSERT INTO SUPPLIERS VALUES(1,'Exotic Liquid','Charoltte Cooper','49 Gilbert St.','Berlin',12209,'Germany');
+INSERT INTO SUPPLIERS VALUES(2,'New Orleans Cajun','Shelley Burke','P.O. Box 78934','Mexico D.F',05023,'Mexico');
+INSERT INTO SUPPLIERS VALUES(3,'Grandma Kelly''s','Regina Murphy','707 Oxford Rd.','Ann Arbor',48104,'USA');
+
+SQL> SELECT * FROM SUPPLIERS;
+
+SUPPLIERID SUPPLIERNAME         CONTACTNAME          ADDRESS                        CITY                 POSTALCODE COUNTRY
+---------- -------------------- -------------------- ------------------------------ -------------------- ---------- --------------------
+         1 Exotic Liquid        Charoltte Cooper     49 Gilbert St.                 Berlin                    12209 Germany
+         2 New Orleans Cajun    Shelley Burke        P.O. Box 78934                 Mexico D.F                 5023 Mexico
+         3 Grandma Kelly's      Regina Murphy        707 Oxford Rd.                 Ann Arbor                 48104 USA
+
+
+a)
+SQL> SELECT CITY FROM CUSTOMERS UNION SELECT CITY FROM SUPPLIERS;
+
+CITY
+--------------------
+Ann Arbor
+Berlin
+Mexico D.F
+
+b)
+SQL> SELECT CITY FROM CUSTOMERS UNION ALL SELECT CITY FROM SUPPLIERS;
+
+CITY
+--------------------
+Berlin
+Mexico D.F
+Mexico D.F
+Berlin
+Mexico D.F
+Ann Arbor
+
+6 rows selected.
+
+c)
+SQL> SELECT CITY FROM CUSTOMERS UNION SELECT CITY FROM SUPPLIERS WHERE COUNTRY = 'Germany';
+
+CITY
+--------------------
+Berlin
+Mexico D.F
+
+d)
+SQL> SELECT C.CUSTOMERNAME, S.SUPPLIERNAME, C.CITY FROM CUSTOMERS C, SUPPLIERS S WHERE C.CITY = S.CITY;
+
+CUSTOMERNAME         SUPPLIERNAME         CITY
+-------------------- -------------------- --------------------
+Alfreds Futter       Exotic Liquid        Berlin
+Antonio Moreno       New Orleans Cajun    Mexico D.F
+Ana helados          New Orleans Cajun    Mexico D.F
+
+e)
+SQL> SELECT COUNTRY FROM SUPPLIERS MINUS SELECT COUNTRY FROM CUSTOMERS;
+
+COUNTRY
+--------------------
+USA
